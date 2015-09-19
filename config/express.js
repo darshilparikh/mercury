@@ -133,6 +133,42 @@ module.exports = function(db) {
 	});
 
 
+	// use this if the env is not defined or separated for testing purposes
+
+	/* app.set('trust proxy' 1) // trust the first proxy
+	app.use(session({
+		secret: "anonymous-id";
+		resave: "false", 
+		saveUninitialized: true, 
+		cookie: { secure = true}
+	})) */
+
+	var sess = {
+		secret: "anonymous-id", 
+		cookie: { maxAge = 6000000}
+	}
+
+	if (app.get('env' === 'production')) {
+		app.set('trust proxy', 1) // trust first proxy
+		sess.cookie.secure = true // serve secure cookies
+	}
+
+	app.use(session(sess));
+
+	app.use(function(req, res, next) {
+		var sess = req.session
+		if (sess.views) {
+			res.setHeader('Content-Type', 'text-html')
+			res.write(sess.views)
+			// write in appropriate data
+			res.end() 
+		} else {
+			sess.views = 1
+			res.end('demo. refresh')
+		}
+	})
+
+
 
 
 	// Assume 404 since no middleware responded
