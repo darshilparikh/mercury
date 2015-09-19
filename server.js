@@ -14,11 +14,13 @@ var init = require('./config/init')(),
 
 // Bootstrap db connection
 var db = mongoose.connect(config.db, function(err) {
+	console.log('connected to DB!!!');
 	if (err) {
 		console.error(chalk.red('Could not connect to MongoDB!'));
 		console.log(chalk.red(err));
 	}
 });
+
 
 // Init the express application
 var app = require('./config/express')(db);

@@ -1,6 +1,9 @@
 'use strict';
 var fs = require('fs');
+var mongoose = require('mongoose');
 
+var dataConvo = require('../models/convo.server.model.js');
+var rawText = require('../models/convo.server.model.js');
 console.log('running');
 
 module.exports = function(app) {
@@ -11,7 +14,20 @@ module.exports = function(app) {
 	
 	var response = function(res) { console.log(res); }
 	var logError = function(err) { console.log(err); }
-	
+	var db = mongoose.connection;
+
+	//console.log(db);
+
+	db.on('error', function(msg){
+		console.log('db connection failed');
+	});
+
+	db.once('open',function(){
+    console.log('db connection is successful');
+	})
+  
+
+
 	/* single example
 	indico.sentimentHQ("kill yourself")
 	.then(response)
@@ -22,22 +38,28 @@ module.exports = function(app) {
 		console.log("indico call");
 		next();
 	});
+  
+  app.post('/#', function(req,res,next){
+    
+
+  })
+
 
 	fs.readFile('./sample-text.json', 'utf8', function (err,data) {
 	  if (err) {
 	    return console.log(err);
 	  }
-	  console.log(data);
+	  //console.log(data);
 	  calcSentiment(data);
   });
 
 	var calcSentiment = function(array){
 		array = JSON.parse(array);
-		console.log('in calc sentiment');
-		console.log(array[0]);
+		//console.log('in calc sentiment');
+		//console.log(array[0]);
 		for(var i=0; i<array.length; i++){
-			console.log(i)
-			console.log(array[i]);
+			//console.log(i)
+			//console.log(array[i]);
 			indico.sentimentHQ(array[i].text).then(response).catch(logError)
 		}
 	}	

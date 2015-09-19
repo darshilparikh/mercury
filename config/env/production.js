@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: process.env.MONGOHQ_URL ||   "mongodb://<admin>:<admin123>@ds042888.mongolab.com:42888/mercury" || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mercury',
+	db: process.env.MONGOHQ_URL ||   "mongodb://database:database@ds051523.mongolab.com:51523/userlogs" || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mercury',
 	assets: {
 		lib: {
 			css: [

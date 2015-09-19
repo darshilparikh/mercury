@@ -9,22 +9,25 @@ var mongoose = require('mongoose'),
 /**
  * Article Schema
  */
-var ConvoSchema = new Schema({
-	created: {
-		type: Date,
-		default: Date.now
-	},
-	content: {
-		type: String,
-		default: '',
-		trim: true
-	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
+var senSchema = new Schema({
+	log: {
+		item: {
+		  time: Date,
+		  sentiment: Number,
+		  keywords: Array
+		}
 	}
 });
 
-var newConvo = mongoose.model('Convo', ConvoSchema);
+var rawtext = new Schema({
+	text: String,
+	timestamp: { type: Date, default: Date.now }
+});
+
+var dataConvo = mongoose.model('dataconvo', senSchema);
+var rawText = mongoose.model('rawconvo', rawtext);
+
+module.exports = dataConvo;
+module.exports = rawText;
 
 
