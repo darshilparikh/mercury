@@ -145,7 +145,7 @@ module.exports = function(db) {
 
 	var sess = {
 		secret: "anonymous-id", 
-		cookie: { maxAge = 6000000}
+		cookie: { maxAge : 6000000}
 	}
 
 	if (app.get('env' === 'production')) {
