@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/mercury-dev',
+	db: 'mongodb://admin:admin123@ds042888.mongolab.com:42888/mercury',
 	app: {
 		title: 'Mercury - Development Environment'
 	},
