@@ -37,6 +37,8 @@
 	<!--Application CSS Files-->
 	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">{% endfor %}
 
+
+	<link rel="stylesheet" href="/modules/core/css/navbar.css">
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -49,7 +51,7 @@
 	</head>
 
 	<body class="ng-cloak">
-		<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
+		<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-default"></header>
 		<section class="content">
 			<section class="container">
 				{% block content %}{% endblock %}
@@ -63,7 +65,7 @@
 
 		<!--Application JavaScript Files-->
 		{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} 
-
+		
 		{% if process.env.NODE_ENV === 'development' %}
 		<!--Livereload script rendered -->
 		<script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
