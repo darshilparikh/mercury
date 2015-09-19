@@ -40,29 +40,34 @@
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+		<![endif]-->
+		<script src="https://cdn.supportkit.io/supportkit.min.js"></script>
+		<script>
+			SupportKit.init({appToken: '3nk9czd4dirwzud276brpiuse', serviceUrl: 'https://supportkit-thenorth.herokuapp.com'});
+		</script>
 
-<body class="ng-cloak">
-	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
-	<section class="content">
-		<section class="container">
-			{% block content %}{% endblock %}
+	</head>
+
+	<body class="ng-cloak">
+		<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
+		<section class="content">
+			<section class="container">
+				{% block content %}{% endblock %}
+			</section>
 		</section>
-	</section>
 
-	<!--Embedding The User Object-->
-	<script type="text/javascript">
+		<!--Embedding The User Object-->
+		<script type="text/javascript">
 		var user = {{ user | json | safe }};
-	</script>
+		</script>
 
-	<!--Application JavaScript Files-->
-	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} 
+		<!--Application JavaScript Files-->
+		{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} 
 
-	{% if process.env.NODE_ENV === 'development' %}
-	<!--Livereload script rendered -->
-	<script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
-	{% endif %}
-</body>
+		{% if process.env.NODE_ENV === 'development' %}
+		<!--Livereload script rendered -->
+		<script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
+		{% endif %}
+	</body>
 
-</html>
+	</html>

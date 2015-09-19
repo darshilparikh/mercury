@@ -9,4 +9,3 @@ exports.index = function(req, res) {
 		request: req
 	});
 };
-

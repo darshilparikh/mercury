@@ -17,6 +17,5 @@ module.exports = function(app) {
 	app.post('/indico', function (req, res, next) {
 		console.log("indico call");
 		next();
-	});
-	
+	});	
 };
