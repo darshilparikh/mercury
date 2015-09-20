@@ -5,7 +5,7 @@ var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'mercury';
 	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  
-	'ui.router', 'ui.bootstrap','ui.identicon', 'ui.utils' ];
+	'ui.router', 'ui.bootstrap','ui.identicon', 'ui.utils', 'btford.socket-io' ];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -18,7 +18,7 @@ var ApplicationConfiguration = (function() {
 
 	return {
 		applicationModuleName: applicationModuleName,
-		applicationModuleVendorDependencies: applicationModuleVendorDependencies,
+		applicationModuleVendorDependencies: applicationModuleVendorDependencies, 
 		registerModule: registerModule
 	};
 })();

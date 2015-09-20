@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('ChatController', ['$scope','$http',
-	function($scope, $http) {
+angular.module('users').controller('ChatController', ['$scope','$http', 'Socket', 
+	function($scope, $http, Socket) {
 		
 		var bubbles = 1;
         var maxBubbles = 8;
@@ -22,15 +22,17 @@ angular.module('users').controller('ChatController', ['$scope','$http',
                     "text" : msg
                 }
              
-            $http.post('/supportkit/mentormessege', objToSend).
-            then(function(response) {
-                alert (JSON.stringify(alert));
-            }, function(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-                alert("Some sort of error with response");
-            });
-        }
+            Socket.emit('mentorinit', {
+                data: objToSend
+                }, function (result) {
+                if (!result) {
+                        alert('There was an error changing your name');
+                } else {
+                
+                       alert(result);
+                }});
+         };
+        
         
         
         function statCtrl($scope) {
@@ -50,9 +52,11 @@ angular.module('users').controller('ChatController', ['$scope','$http',
                 source.addEventListener('message', handleCallback, false);
         }
         
-        var socket = io.connect('http://localhost:3000');
-        socket.on('connect', function () {
-                socket.emit('mentorinit', { name: 'ZeeSha' });
+        //alert(io);
+        //alert(JSON.stringify(io));
+
+        Socket.on('connect', function(article) {
+                console.log(article);
         });
                
                

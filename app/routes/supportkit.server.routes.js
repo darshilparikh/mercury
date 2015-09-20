@@ -109,6 +109,7 @@ module.exports = function(app) {
 	}
 
 	app.post('/supportkit/mentor/init', function (req, res, next) { 
+		console.log("Heloo Support");
 		var mentorID = generateUUID();
 		var mentorName = req.name;
 		freeMentors.push({"id" : mentorID, "name" : mentorName });
