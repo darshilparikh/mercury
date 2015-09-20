@@ -1,0 +1,40 @@
+<section data-ng-controller="ChatController">
+	<div class="logo"></div>
+    
+    <div id="contents">
+
+        <div id="wrapper">
+
+                <div class="panel panel-default" style="background-color: #34495e">
+                    <img class="bubble-avatar" ng-src="{{avatar_urlOther}}" />
+                    <img class="bubble-quote" ng-src="/modules/users/img/quote.png" />
+                    <div class="bubble-text">
+                        <p style="color:white">HI</p>
+                    </div>
+                </div>
+                
+                <div class="panel panel-success" style="background-color: #2ecc71">
+                    <img class="bubble-avatar" style="float:right" ng-src="{{avatar_urlSelf}}" />
+                    <img class="bubble-quote flip-it" style="float:right" src="/modules/users/img/quote.png" />
+                    <div class="bubble-text" style="text-align: right; padding-left:10px;">
+                        <p style="color:white">HI Back</p>
+                    </div>
+                </div>
+
+
+        </div>
+
+    </div>
+    
+    
+    <center>
+    <div id="form">
+        <form class="form">
+            <input id="msgText" ng-model="msg" style="width:393px" type="text" />
+            <a class="btn btn-default"ng-click="sendMessage(msg)">
+                Send
+            </a>
+        </form>
+    </div>
+    </center>
+</section>
