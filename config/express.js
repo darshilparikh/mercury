@@ -206,7 +206,6 @@ if (app.get('env' === 'production')) {
 	
 	
 	io.on('connection', function (socket) {
-<<<<<<< HEAD
 		console.log ("RECOGNIZED CLIENT!");
 		socket.on('mentorinit', function(data) {
 			console.log(data);
@@ -222,14 +221,7 @@ if (app.get('env' === 'production')) {
 				}
 			}
 		);
-=======
-		socket.on('mentorinit', function(data) {
-			console.log(data);
-			console.log("[$$$$$$]");
-			var options = {url: 'supportkit/mentor/init', form: {name: data.name}};
-			request.post(options);
->>>>>>> half-second-refresh
-		});
+
 		
 		socket.on('error', function (err) { console.error(err.stack); // TODO, cleanup })
 	});
@@ -237,6 +229,7 @@ if (app.get('env' === 'production')) {
 	io.on( 'error', function(err) {
 		console.log("err");
 		console.log(err);
+	});
 	});
 
 
