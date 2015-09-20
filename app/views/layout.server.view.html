@@ -45,18 +45,24 @@
 		<![endif]-->
 		<script src="https://cdn.supportkit.io/supportkit.min.js"></script>
 		<script>
-			SupportKit.init({appToken: '3nk9czd4dirwzud276brpiuse', serviceUrl: 'https://supportkit-thenorth.herokuapp.com'});
+		SupportKit.init({
+			appToken: '3nk9czd4dirwzud276brpiuse', 
+			serviceUrl: 'https://supportkit-thenorth.herokuapp.com',
+		});
 		</script>
 
 	</head>
 
 	<body class="ng-cloak">
+
 		<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-default"></header>
 		<section class="content">
 			<section class="container">
 				{% block content %}{% endblock %}
 			</section>
 		</section>
+
+
 
 		<!--Embedding The User Object-->
 		<script type="text/javascript">
