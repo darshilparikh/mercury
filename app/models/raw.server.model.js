@@ -1,18 +1,12 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
-
-/**
- * Article Schema
- */
+// for raw message text
 var senSchema = new Schema({
 	log: {
 		item: {
-		  time: Date,
+		  timestamp: String,
 		  sentiment: Number,
 		  keywords: Array
 		}
@@ -24,9 +18,9 @@ var rawtext = new Schema({
 	text: String
 });
 
-var dataConvo = mongoose.model('dataconvo', senSchema);
 var rawText = mongoose.model('rawconvo', rawtext,'rawconvo');
 
 module.exports = rawText;
+
 
 

@@ -2,9 +2,9 @@
 var fs = require('fs');
 var mongoose = require('mongoose');
 
-var dataConvo = require('../models/convo.server.model.js');
-var rawText = require('../models/convo.server.model.js');
-console.log('running');
+var dataConvo = require('../models/sen.server.model.js');
+var rawText = require('../models/raw.server.model.js');
+//console.log(dataConvo);
 
 module.exports = function(app) {
 	
@@ -25,56 +25,114 @@ module.exports = function(app) {
 	db.once('open',function(){
     console.log('db connection is successful');
 	})
-  
   app.get('/test123', function(req,res,next){
   	console.log('got 123')
-    rawText.findOne({}).select('timestamp text').exec( function(err, results){
-      
-      if(err){ console.log(err)};
-      
+    rawText.find({}).lean().exec( function(err, results){
       console.log(results)
     } );
  
   })
-	/* single example
-	indico.sentimentHQ("kill yourself")
-	.then(response)
-	.catch(logError);
-	*/
-
-	app.post('/indico', function (req, res, next) {
-		console.log("indico call");
-		next();
-	});
-  
-  app.get('/test123', function(req,res,next){
-  	console.log('got 123')
-    rawText.find({}).exec( function(err, results){
-      
-      if(err){ console.log(err)};
-      
-      console.log(results)
-    } );
- 
-  })
-
 
 	fs.readFile('./sample-text.json', 'utf8', function (err,data) {
 	  if (err) {
 	    return console.log(err);
 	  }
 	  //console.log(data);
-	  calcSentiment(data);
+	  //insertRawToDB(data);
+	  //insertSenToDB(data);
+	  console.log('about to go to extractKeywords!');
+	  insertSenToDB(data, extractKeywords);
   });
 
-	var calcSentiment = function(array){
-		array = JSON.parse(array);
-		//console.log('in calc sentiment');
-		//console.log(array[0]);
+	/* 
+	** Goes through an array of objects and inserts them into the 
+	** database
+	*/
+	var insertRawToDB = function(array){
+		array = JSON.parse(array);	
 		for(var i=0; i<array.length; i++){
-			//console.log(i)
-			//console.log(array[i]);
-			indico.sentimentHQ(array[i].text).then(response).catch(logError)
-		}
+			var newObject = new rawText({timestamp: array[i].timestamp, text: array[i].text});
+			newObject.save(function(err) {
+		    if (err) throw err;;
+			});
+		};
 	};
+
+	/* 
+	** Goes through an array of objects, analyzes them using
+	** Indico's API and inserts these objects into the database.
+	*/
+	var insertSenToDB = function(array, callback){
+		array = JSON.parse(array);	
+		for(var i=0; i<array.length; i++){
+			// run sentiment analyses on the chunk of text
+			//var keywords = extractKeywords(array[i].text);
+			extractKeywords(array[i].text, array[i].timestamp, createObject);
+			//console.log(array[i])
+			//var sentiment = 
+			//var newObject = new dataConvo({timestamp: array[i].timestamp, sentiment: sentiment, keywords: extractKeywords(array[i].text)});
+			/*newObject.save(function(err) {
+		    if (err) throw err;;
+			});*/
+		};
+	};
+
+	/*
+	** Extracts the keywords from the text using Indico API
+	** and returns an array with those words
+	*/
+	var extractKeywords = function(text, timestamp, callback){
+		var array=[];
+		
+
+		indico.keywords(text).then( function(res){ 
+			
+			loop(array, res);
+			console.log('array here is');
+		  console.log(array);
+			
+			var sentiment = indico.sentimentHQ(text).then(function(response){
+				console.log(response);
+				callback(timestamp, array,response);
+
+			}).catch(logError);
+
+			//var newObject = new dataConvo({timestamp: array[i].timestamp, sentiment: sentiment, keywords: array});
+			
+			//callback(newObject); 
+
+		}).catch( function(err){ console.warn(err); });
+	};
+
+var loop = function(array,res){
+	//console.log(res);
+	for(var key in res){
+		array.push(key);
+	}
+	//console.log(array);
+}
+
+  var createObject = function(timestamp, array, response){
+  	console.log(typeof timestamp);
+  	console.log('array is ');
+  	console.log(array);
+
+   	
+   	var newObject = new dataConvo( {
+   		log: {
+				item: {
+				  timestamp: timestamp,
+				  sentiment: response,
+				  keywords: array
+				}
+			} 
+		});
+		console.log(newObject);
+		
+		newObject.save(function(err) {
+      if (err) throw err;;
+		});
+ 	};
+
+// end of module.exports
 }
