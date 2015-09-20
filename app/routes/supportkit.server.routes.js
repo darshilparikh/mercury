@@ -20,8 +20,7 @@ module.exports = function(app) {
 	var onGoingChats = [];
 	var freeMentors = [];
 	var waitingList = [];
-
-	var openConnections = [];
+	var waitingMsgs = [];
 
 	function sendMessage(senderName, appUserId, id, messageText) {
 		// /api/appusers/{appUserId|userId}/conversation/messages
@@ -108,12 +107,40 @@ module.exports = function(app) {
 		}
 	}
 
+	app.post('/supportkit/mentor/getmsgs', function (req, res, next) { 
+		var mentorID = req.id;
+		if(waitingMsgs[mentorID]) {
+			res.send(waitingMsgs[mentorID]);
+		}
+		res.send();
+	});
+
+	app.post('/supportkit/mentor/sendmessege', function (req, res, next) {
+		var msgSent = false;
+		console.log("Here");
+		for(var x = 0; x < onGoingChats.length; x++) {
+			if(onGoingChats[x]["mentor"] == req.id) {
+				sendMessage(req.name, req.id, req.id, req.text);
+				msgSent = true;
+			}
+		}
+		if(msgSent) {
+			res.send();
+		} else {
+			if(! waitingMsgs[req.id]) {
+				waitingMsgs[req.id] = [];
+			}
+			waitingMsgs[req.id].push("Sorry, please wait to be matched before sending messages.");
+			res.send();
+		}
+	});
+
 	app.post('/supportkit/mentor/init', function (req, res, next) { 
 		var mentorID = generateUUID();
 		var mentorName = req.name;
 		freeMentors.push({"id" : mentorID, "name" : mentorName });
 		assignMentor("", false);
-		res.send();
+		res.send({"id" : mentorID});
 	});
 
 	app.post('/supportkit', function (req, res, next) {
@@ -191,37 +218,5 @@ module.exports = function(app) {
 	}
 
 	checkWebHooks();
-	
 
-	
-
-	app.get('/supportkit/mentor/message', function (req, res) {
-		console.log("SOCKET IO BRUJ! YOOoOoooooooooooooooooooooooooooooo");
-		console.log(global.io);
-		console.log('supportkit');
-		console.log(req.body);
-		console.log(req.headers);
-
-		req.socket.setTimeout(Infinity);
-		res.writeHead(200, {
-			'Content-Type': 'text/event-stream',
-			'Cache-Control': 'no-cache',
-			'Connection': 'keep-alive'
-		});
-		res.write('\n');
-		openConnections.push(res);
-		req.on("close", function() {
-			var toRemove;
-			for (var j =0 ; j < openConnections.length ; j++) {
-				if (openConnections[j] == res) {
-					toRemove =j;
-					break;
-				}
-			}
-			openConnections.splice(j,1);
-		});
-
-
-		//next();
-	});
 };

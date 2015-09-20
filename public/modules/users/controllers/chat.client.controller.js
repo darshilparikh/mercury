@@ -1,66 +1,45 @@
 'use strict';
 
-angular.module('users').controller('ChatController', ['$scope','$http',
-	function($scope, $http) {
-		
-		var bubbles = 1;
-        var maxBubbles = 8;
-        var server;
-        
-        var user = "Mike";
-        var customerid = "123";
+angular.module('users').controller('ChatController', ['$scope','$http', function($scope, $http) {
+  var bubbles = 1;
+  var maxBubbles = 8;
+  var server;
 
-        $scope.avatar_urlSelf = '/modules/users/img/identicons/Unknown-2.png';
-        $scope.avatar_urlOther = '/modules/users/img/identicons/Unknown-3.png';
-        
-         $scope.sendMessage = function(msg) {
-             alert("Messege sent = " + msg);
-             var objToSend = 
-                {
-                    "name" : user,
-                    "id" : customerid,
-                    "text" : msg
-                }
-             
-            $http.post('/supportkit/mentormessege', objToSend).
-            then(function(response) {
-                alert (JSON.stringify(alert));
-            }, function(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-                alert("Some sort of error with response");
-            });
-        }
-        
-        
-        function statCtrl($scope) {
-        
-                // the last received msg
-                $scope.msg = {};
-                
-                // handles the callback from the received event
-                var handleCallback = function (msg) {
-                        alert(JSON.stringify(msg));
-                        $scope.$apply(function () {
-                                $scope.msg = JSON.parse(msg.data)
-                        });
-                }
-                
-                var source = new EventSource('/supportkit/mentor/message');
-                source.addEventListener('message', handleCallback, false);
-        }
-        
-        var socket = io.connect('http://localhost:3000');
-        socket.on('connect', function () {
-                socket.emit('mentorinit', { name: 'ZeeSha' });
-        });
-               
-               
-        
-        
-        
+  var user = "Mike";
+  var customerid = "123";
 
-        $scope.addBubble = function(avatar, text) {
+  $scope.avatar_urlSelf = '/modules/users/img/identicons/Unknown-2.png';
+  $scope.avatar_urlOther = '/modules/users/img/identicons/Unknown-3.png';
+
+  $scope.sendMessage = function (msg) {
+   console.log("Messege sent = " + msg);
+   var objToSend = { "name" : user, "id" : customerid, "text" : msg };
+
+   $http.post('/supportkit/mentor/sendmessege', objToSend)
+   .then(function(response) {
+    console.log (JSON.stringify(response));
+}, function(response) {
+    console.log("Some sort of error with response");
+});
+}
+$scope.getMessages = function () {
+    var objToSend = {"id" : customerid};
+    $http.post('/supportkit/mentor/getmsgs', objToSend)
+    .then(function(response) {
+        console.log (JSON.stringify(response));
+        setTimeout(function () {
+            $scope.getMessages();
+        }, 500);
+    }, function(response) {
+        console.log("Some sort of error with response");
+    });
+}
+
+$scope.getMessages();
+
+
+
+$scope.addBubble = function(avatar, text) {
 
             // Get the bytes of the image and convert it to a BASE64 encoded string and then
             // we use data URI to add dynamically the image data
@@ -70,11 +49,11 @@ angular.module('users').controller('ChatController', ['$scope','$http',
             $("#msgText").val("");
 
             $(".bubble-container:last")
-                .after(bubble);
+            .after(bubble);
 
             if (bubbles >= maxBubbles) {
                 var first = $(".bubble-container:first")
-                    .remove();
+                .remove();
                 bubbles--;
             }
 
@@ -85,14 +64,11 @@ angular.module('users').controller('ChatController', ['$scope','$http',
                 }
 
                 $(this).next(".bubble-container")
-                    .show(250, showNext);
+                .show(250, showNext);
 
                 $("#wrapper").scrollTop(9999999);
             });
         }
 
         
-	}
-        
-     
-]);
+    }]);
