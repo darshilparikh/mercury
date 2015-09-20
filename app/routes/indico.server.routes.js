@@ -14,8 +14,8 @@ module.exports = function(app) {
 	
 	var response = function(res) { console.log(res); }
 	var logError = function(err) { console.log(err); }
+	
 	var db = mongoose.connection;
-
 	//console.log(db);
 
 	db.on('error', function(msg){
@@ -26,8 +26,16 @@ module.exports = function(app) {
     console.log('db connection is successful');
 	})
   
-
-
+  app.get('/test123', function(req,res,next){
+  	console.log('got 123')
+    rawText.find({}).exec( function(err, results){
+      
+      if(err){ console.log(err)};
+      
+      console.log(results)
+    } );
+ 
+  })
 	/* single example
 	indico.sentimentHQ("kill yourself")
 	.then(response)
@@ -39,9 +47,15 @@ module.exports = function(app) {
 		next();
 	});
   
-  app.post('/#', function(req,res,next){
-    
-
+  app.get('/test123', function(req,res,next){
+  	console.log('got 123')
+    rawText.find({}).exec( function(err, results){
+      
+      if(err){ console.log(err)};
+      
+      console.log(results)
+    } );
+ 
   })
 
 
@@ -62,6 +76,5 @@ module.exports = function(app) {
 			//console.log(array[i]);
 			indico.sentimentHQ(array[i].text).then(response).catch(logError)
 		}
-	}	
-
-};
+	};
+}

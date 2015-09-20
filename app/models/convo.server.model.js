@@ -20,14 +20,13 @@ var senSchema = new Schema({
 });
 
 var rawtext = new Schema({
-	text: String,
-	timestamp: { type: Date, default: Date.now }
-});
+      timestamp: String,
+    	text: String
+	});
 
 var dataConvo = mongoose.model('dataconvo', senSchema);
 var rawText = mongoose.model('rawconvo', rawtext);
 
-module.exports = dataConvo;
 module.exports = rawText;
 
 
