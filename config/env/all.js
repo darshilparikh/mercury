@@ -17,6 +17,7 @@ module.exports = {
 				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
 			],
 			js: [
+				'https://cdn.socket.io/socket.io-1.3.6.js',
 				'public/lib/angular/angular.js',
 				'public/lib/angular-resource/angular-resource.js', 
 				'public/lib/angular-cookies/angular-cookies.js', 

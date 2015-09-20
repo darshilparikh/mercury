@@ -8,6 +8,8 @@ var fs = require('fs'),
 	http = require('http'),
 	https = require('https'),
 	express = require('express'),
+    http = require('http'),
+    socketio = require('socket.io'),
 	morgan = require('morgan'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
@@ -22,7 +24,8 @@ var fs = require('fs'),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
-	path = require('path');
+	path = require('path'),
+	request = require('request');
 
 module.exports = function(db) {
 	// Initialize express app
@@ -197,6 +200,22 @@ module.exports = function(db) {
 		// Return HTTPS server instance
 		return httpsServer;
 	}
+
+	var server = http.createServer(app);
+	var io = socketio.listen(server);
+	global.io = io;
+	console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+	console.log(global.io);
+	app.set('socketio', io);
+	app.set('server', server);
+	
+	io.on('connection', function (socket) {
+		socket.on('menterinit', function(data) {
+			console.log(data);
+			var options = {url: 'supportkit/mentor/init', form: {name: data.name}};
+			request.post(options);
+		});
+	});
 
 	// Return Express server instance
 	return app;

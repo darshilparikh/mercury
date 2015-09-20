@@ -1,4 +1,8 @@
+
+
 'use strict';
+
+
 var http = require('http');
 var request = require('request');
 module.exports = function(app) {
@@ -187,8 +191,13 @@ module.exports = function(app) {
 	}
 
 	checkWebHooks();
+	
+
+	
 
 	app.get('/supportkit/mentor/message', function (req, res) {
+		console.log("SOCKET IO BRUJ! YOOoOoooooooooooooooooooooooooooooo");
+		console.log(global.io);
 		console.log('supportkit');
 		console.log(req.body);
 		console.log(req.headers);
