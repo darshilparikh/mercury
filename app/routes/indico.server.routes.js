@@ -84,19 +84,14 @@ module.exports = function(app) {
 	var extractKeywords = function(text, timestamp, callback){
 		var array=[];
 		
-
 		indico.keywords(text).then( function(res){ 
-			
+			// use loop to add values from the response object to the array
 			loop(array, res);
-			console.log('array here is');
-		  console.log(array);
-			
 			var sentiment = indico.sentimentHQ(text).then(function(response){
 				console.log(response);
 				callback(timestamp, array,response);
 
 			}).catch(logError);
-
 			//var newObject = new dataConvo({timestamp: array[i].timestamp, sentiment: sentiment, keywords: array});
 			
 			//callback(newObject); 
@@ -113,11 +108,11 @@ var loop = function(array,res){
 }
 
   var createObject = function(timestamp, array, response){
+  	/*
   	console.log(typeof timestamp);
   	console.log('array is ');
   	console.log(array);
-
-   	
+		*/
    	var newObject = new dataConvo( {
    		log: {
 				item: {
@@ -127,8 +122,7 @@ var loop = function(array,res){
 				}
 			} 
 		});
-		console.log(newObject);
-		
+		//console.log(newObject);
 		newObject.save(function(err) {
       if (err) throw err;;
 		});
