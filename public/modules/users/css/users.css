@@ -12,3 +12,140 @@
 	right: 10px;
 	position: absolute;
 }
+
+
+html, body
+{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#contents
+{
+	width: 500px;
+	margin: auto;
+}
+
+#wrapper
+{
+	height: 520px;
+	overflow: auto;
+}
+
+
+body
+{
+	background-color: #edecec;
+	font-family: 'OverlockRegular', Arial, sans-serif;
+}
+
+.logo
+{
+	margin:auto;
+	background: url("../img/logo.png") no-repeat;
+	width:260px;
+	height:100px;
+}
+
+.bubble-avatar
+{
+	height: 50px;
+	width: 50px;
+	float: left;
+	margin-right: 0px;
+}
+
+
+.bubble-text
+{
+	height: 50px;
+	display:table;
+}
+
+.bubble-text p
+{
+	display: table-cell; 
+	vertical-align: middle; 
+	font-size:16px;
+}
+
+.bubble-quote
+{
+
+	height: 30px;
+	width: 30px;
+	float: left;
+	margin-bottom: 20px;
+	margin-right: 0px;
+}
+
+.bubble
+{
+	display: inline-block;
+	position: relative;
+	clear: both;
+	background-color: #ffffff;
+	width: 98%;
+	border: 1px solid #bfc2c4;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.bubble-container
+{
+	display: none;
+	padding-top: 8px;
+	width: 98%;
+}
+
+
+.form input, .form textarea
+{
+	border: 1px solid #bfc2c4;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+
+}
+
+
+.form input[type="text"], .form input[type="password"]
+{
+	border: 1px solid #c9c9c9;
+	color: #404040;
+	font-size: 11px;
+	height: 28px;
+	margin-bottom: 3px;
+	padding: 0 6px;
+}
+
+
+.btn-default .btm-link {
+  color: #ffffff;
+}
+.btn-default .btn-link:hover {
+  color: #2ecc71;
+}
+
+.btn-default {
+    color: #ffffff;
+    background-image: none!important;
+	background-color: #34495e!important;
+  	border-color: #2c3e50!important;
+    box-shadow: none!important;
+    text-shadow: none!important;
+}
+
+.btn-default:hover, .btn-default:focus {
+  color: #2ecc71;
+    background-color: #34495e!important;
+    background-position: 0px -15px;
+}
+
+.flip-it {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: "FlipH";
+    filter: FlipH;
+}

@@ -68,6 +68,14 @@
 		
 		{% if process.env.NODE_ENV === 'development' %}
 		<!--Livereload script rendered -->
+	
+		<script type="text/javascript" src="/lib/identicon/pnglib.js"></script>
+		<script type="text/javascript" src="/lib/identicon/identicon.js"></script>	
+		<script type="text/javascript" src="/lib/angular-identicon/dist/angular-identicon.js"></script>
+			
+	
+
+		
 		<script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
 		{% endif %}
 	</body>
