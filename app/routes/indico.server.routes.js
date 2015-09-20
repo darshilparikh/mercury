@@ -1,3 +1,4 @@
+
 'use strict';
 var fs = require('fs');
 var mongoose = require('mongoose');
@@ -25,11 +26,14 @@ module.exports = function(app) {
 	db.once('open',function(){
     console.log('db connection is successful');
 	})
-  app.get('/test123', function(req,res,next){
+  app.get('/graph', function(req,res,next){
   	console.log('got 123')
-    rawText.find({}).lean().exec( function(err, results){
-      console.log(results)
-    } );
+    dataConvo.find({}).lean().exec( function(err, results){
+    	console.log(results);
+      res.send(results);
+
+    });
+
  
   })
 
