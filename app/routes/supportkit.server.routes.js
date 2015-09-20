@@ -110,10 +110,10 @@ module.exports = function(app) {
 
 	app.post('/supportkit/mentor/init', function (req, res, next) { 
 		var mentorID = generateUUID();
-		var mentorName = req.body.name;
+		var mentorName = req.name;
 		freeMentors.push({"id" : mentorID, "name" : mentorName });
 		assignMentor("", false);
-		res.send({"id" : mentorID});
+		res.send();
 	});
 
 	app.post('/supportkit', function (req, res, next) {
@@ -127,7 +127,7 @@ module.exports = function(app) {
 
 		if(req.body.event === 'message:appUser') {
 			if(ifOnGoingChat(appUserId)) {
-				
+				global.io.sockets.emit(appUserId, { name: req.body.name, text : req.body.text });
 			} else {
 				assignMentor(appUserId, true, req.body);
 			}
