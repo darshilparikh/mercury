@@ -37,16 +37,6 @@ db.once('open',function(){
 // Init the express application
 var app = require('./config/express')(mongooseIn);
 
-app.get('/test123', function(req,res,next){
-	console.log('got 123')
-  rawText.find({}).exec( function(err, results){
-    
-    if(err){ console.log(err)};
-    console.log(results)
-  } );
-});
-
-
 // Bootstrap passport config
 //require('./config/passport')();
 

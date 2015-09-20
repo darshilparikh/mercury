@@ -28,7 +28,7 @@ module.exports = function(app) {
   
   app.get('/test123', function(req,res,next){
   	console.log('got 123')
-    rawText.find({}).exec( function(err, results){
+    rawText.findOne({}).select('timestamp text').exec( function(err, results){
       
       if(err){ console.log(err)};
       

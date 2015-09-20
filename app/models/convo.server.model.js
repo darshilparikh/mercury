@@ -20,12 +20,12 @@ var senSchema = new Schema({
 });
 
 var rawtext = new Schema({
-      timestamp: String,
-    	text: String
-	});
+  timestamp: String,
+	text: String
+});
 
 var dataConvo = mongoose.model('dataconvo', senSchema);
-var rawText = mongoose.model('rawconvo', rawtext);
+var rawText = mongoose.model('rawconvo', rawtext,'rawconvo');
 
 module.exports = rawText;
 
