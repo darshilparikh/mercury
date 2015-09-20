@@ -212,9 +212,22 @@ module.exports = function(db) {
 		console.log ("RECOGNIZED CLIENT!");
 		socket.on('mentorinit', function(data) {
 			console.log(data);
-			var options = {url: 'supportkit/mentor/init', form: {name: data.data.name}};
-			request.post(options);
+			
+
+
+		request.post(
+			'http://localhost:3000/supportkit/mentor/init',
+			{ form: { name: data.data.name } },
+			function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+					console.log(body)
+				}
+			}
+		);
 		});
+		
+		socket.on('error', function (err) { console.error(err.stack); // TODO, cleanup })
+	});
 	});
 
 	// Return Express server instance
