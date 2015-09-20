@@ -16,7 +16,8 @@ module.exports = function(app) {
 	var onGoingChats = [];
 	var freeMentors = [];
 	var waitingList = [];
-	
+
+	var openConnections = [];
 
 	function sendMessage(senderName, appUserId, id, messageText) {
 		// /api/appusers/{appUserId|userId}/conversation/messages
@@ -61,7 +62,7 @@ module.exports = function(app) {
 		return false;
 	}
 
-	function assignMentor(appUserId, isStudent) {
+	function assignMentor(appUserId, isStudent, message) {
 		if(! isStudent) {
 			if(waitingList.length > 0) {
 				onGoingChats.push({
@@ -86,6 +87,7 @@ module.exports = function(app) {
 					"appUserId" : appUserId
 				});
 				sendMessage("System", appUserId, appUserId, "You've been matched! Say hello to " + freeMentors[0].name);
+				sendMessage(freeMentors[0].name, appUserId, appUserId, message);
 				freeMentors.shift();
 
 			} else {
@@ -123,7 +125,7 @@ module.exports = function(app) {
 			if(ifOnGoingChat(appUserId)) {
 				
 			} else {
-				assignMentor(appUserId, true);
+				assignMentor(appUserId, true, req.body);
 			}
 		}
 		res.send();
@@ -185,11 +187,32 @@ module.exports = function(app) {
 	}
 
 	checkWebHooks();
-	app.post('/supportkit/mentor/message', function (req, res, next) {
+
+	app.get('/supportkit/mentor/message', function (req, res) {
 		console.log('supportkit');
 		console.log(req.body);
 		console.log(req.headers);
-		res.send();
+
+		req.socket.setTimeout(Infinity);
+		res.writeHead(200, {
+			'Content-Type': 'text/event-stream',
+			'Cache-Control': 'no-cache',
+			'Connection': 'keep-alive'
+		});
+		res.write('\n');
+		openConnections.push(res);
+		req.on("close", function() {
+			var toRemove;
+			for (var j =0 ; j < openConnections.length ; j++) {
+				if (openConnections[j] == res) {
+					toRemove =j;
+					break;
+				}
+			}
+			openConnections.splice(j,1);
+		});
+
+
 		//next();
 	});
 };
