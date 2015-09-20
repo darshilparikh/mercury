@@ -65,7 +65,13 @@ angular.module('users').controller('GraphController', ['$scope', '$http',
 				xy.y = sentiment;
 				result.push(xy);
 			};
+			
+			result.sort(function(a,b) { 
+		    return new Date(a.x).getTime() - new Date(b.x).getTime() 
+			});
+			console.log('after sort');
 			console.log(result);
+			
 			chart.options.data[0].dataPoints = result;
 			callback();
 		}
