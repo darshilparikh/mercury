@@ -1,8 +1,8 @@
 'use strict';
 
 // Config HTTP Error Handling
-angular.module('users').config(['$httpProvider',
-	function($httpProvider) {
+angular.module('users').config(['$httpProvider', 'btford.socket-io',
+	function($httpProvider, btford.socket-io) {
 		// Set the httpProvider "not authorized" interceptor
 		$httpProvider.interceptors.push(['$q', '$location', 'Authentication',
 			function($q, $location, Authentication) {
