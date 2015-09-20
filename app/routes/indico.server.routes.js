@@ -124,7 +124,9 @@ var loop = function(array,res){
 		});
 		//console.log(newObject);
 		newObject.save(function(err) {
-      if (err) throw err;;
+      if (err && (11000 === err.code || 11001 === err.code)){
+      	console.log('Item is already in the database.');
+      }
 		});
  	};
 

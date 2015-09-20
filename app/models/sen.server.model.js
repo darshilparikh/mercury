@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 var senSchema = new Schema({
 	log: {
 		item: {
-		  timestamp: String,
+		  timestamp:  { type: String, required: true, unique: true },
 		  sentiment: Number,
 		  keywords: Array
 		}
