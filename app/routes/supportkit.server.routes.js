@@ -110,7 +110,9 @@ module.exports = function(app) {
 	app.post('/supportkit/mentor/getmsgs', function (req, res, next) { 
 		var mentorID = req.id;
 		if(waitingMsgs[mentorID]) {
-			res.send(waitingMsgs[mentorID]);
+			var toReturn = waitingMsgs[mentorID];
+			waitingMsgs[mentorID] = []; 
+			res.send(toReturn);
 		}
 		res.send();
 	});
