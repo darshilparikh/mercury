@@ -6,12 +6,12 @@
 var http = require('http');
 var request = require('request');
 module.exports = function(app) {
-	var appID = '55feaa51a6e5c31900f796a1';
-	var appToken = 'aywancy8jzl7zkrn4zx74p16y';
-	var JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjU1ZmVhYTdiYTZlNWMzMTkwMGY3OTZhMiJ9.eyJzY29wZSI6ImFwcCIsImlhdCI6MTQ0Mjc1MzI1MH0.EInFXyLIdbxvUj8tKnAAeUB_UuDptAIiwjOjkTUulvM";
+	var appID = '55febe228b67b13299e3c0d9';
+	var appToken = '94zk7mnovms9q76yyzyd6v03c';
+	var JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjU1ZmViZTJjOGI2N2IxMzI5OWUzYzBkYSJ9.eyJzY29wZSI6ImFwcCIsImlhdCI6MTQ0Mjc1ODMxNn0.MPU76C8GdeVb4tvEOQ9JaKhiUjJ5Jn60GEoRZshGlzA";
 	var secretKey = "";
 
-	var skHost = 'https://supportkit-guestdriven.herokuapp.com';
+	var skHost = 'http://35a03906.ngrok.com';
 	var webHooks = '/api/apps/' + appID + '/webhooks';
 	var ngrok = "http://35930313.ngrok.io/supportkit";
 	var postMessagePre = "/api/appusers/";
