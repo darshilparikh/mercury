@@ -41,8 +41,8 @@ var app = require('./config/express')(mongooseIn);
 //require('./config/passport')();
 
 // Start the app by listening on <port>
-app.listen(config.port);
-
+//app.listen(config.port);
+app.get('server').listen(config.port);
 // Expose app
 exports = module.exports = app;
 
