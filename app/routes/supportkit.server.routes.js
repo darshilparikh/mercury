@@ -6,14 +6,14 @@
 var http = require('http');
 var request = require('request');
 module.exports = function(app) {
-	var appID = '55fcf13cb16704190059ad34';
-	var appToken = '3nk9czd4dirwzud276brpiuse';
-	var JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjU1ZmRjMjJkYjE2NzA0MTkwMDU5YWQ1NiJ9.eyJzY29wZSI6ImFwcCIsImlhdCI6MTQ0MjY5Mzc4M30.wSgavSXoJq8TUdLthI8aIlY1Nq55SG7f1br96EO9fhQ";
+	var appID = '55feaa51a6e5c31900f796a1';
+	var appToken = 'aywancy8jzl7zkrn4zx74p16y';
+	var JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjU1ZmVhYTdiYTZlNWMzMTkwMGY3OTZhMiJ9.eyJzY29wZSI6ImFwcCIsImlhdCI6MTQ0Mjc1MzI1MH0.EInFXyLIdbxvUj8tKnAAeUB_UuDptAIiwjOjkTUulvM";
 	var secretKey = "";
 
-	var skHost = 'https://supportkit-thenorth.herokuapp.com';
+	var skHost = 'https://supportkit-guestdriven.herokuapp.com';
 	var webHooks = '/api/apps/' + appID + '/webhooks';
-	var ngrok = "http://0b62376d.ngrok.io/supportkit";
+	var ngrok = "http://35930313.ngrok.io/supportkit";
 	var postMessagePre = "/api/appusers/";
 	var postMessagePost = "/conversation/messages";
 
@@ -27,7 +27,7 @@ module.exports = function(app) {
 		var options = {
 			url: skHost + postMessagePre + appUserId + postMessagePost,
 			headers: {
-				'app-token' : '3nk9czd4dirwzud276brpiuse',
+				'app-token' : appToken,
 				'Authorization' : 'Bearer ' + JWT
 			},
 			form: {
@@ -153,6 +153,11 @@ module.exports = function(app) {
 
 	app.post('/supportkit', function (req, res, next) {
 		var appUserId = req.body.appUserId;
+				console.log('supportkit');
+		console.log(req.body);
+		console.log(appUserId);
+		console.log(req.headers);
+
 		if(secretKey != req.headers["x-api-key"]) {
 			res.send();
 		}
@@ -182,7 +187,7 @@ module.exports = function(app) {
 		var options = {
 			url: skHost + webHooks,
 			headers: {
-				'app-token' : '3nk9czd4dirwzud276brpiuse',
+				'app-token' : appToken,
 				'Authorization' : 'Bearer ' + JWT
 			},
 			form: {
@@ -197,7 +202,7 @@ module.exports = function(app) {
 		var options = {
 			url: skHost + webHooks + "/" + _id,
 			headers: {
-				'app-token' : '3nk9czd4dirwzud276brpiuse',
+				'app-token' : appToken,
 				'Authorization' : 'Bearer ' + JWT
 			}
 		};
@@ -209,7 +214,7 @@ module.exports = function(app) {
 		var options = {
 			url: skHost + webHooks,
 			headers: {
-				'app-token' : '3nk9czd4dirwzud276brpiuse',
+				'app-token' : appToken,
 				'Authorization' : 'Bearer ' + JWT
 			}
 		};
