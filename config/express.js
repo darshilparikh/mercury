@@ -4,30 +4,30 @@
 /**
  * Module dependencies.
  */
-var fs = require('fs'),
-	http = require('http'),
-	https = require('https'),
-	express = require('express'),
-    http = require('http'),
-    socketio = require('socket.io'),
-	morgan = require('morgan'),
-	bodyParser = require('body-parser'),
-	session = require('express-session'),
-	compress = require('compression'),
-	methodOverride = require('method-override'),
-	cookieParser = require('cookie-parser'),
-	helmet = require('helmet'),
-	passport = require('passport'),
-	mongoStore = require('connect-mongo')({
-		session: session
-	}),
-	flash = require('connect-flash'),
-	config = require('./config'),
-	consolidate = require('consolidate'),
-	path = require('path'),
-	request = require('request');
+ var fs = require('fs'),
+ http = require('http'),
+ https = require('https'),
+ express = require('express'),
+ http = require('http'),
+ socketio = require('socket.io'),
+ morgan = require('morgan'),
+ bodyParser = require('body-parser'),
+ session = require('express-session'),
+ compress = require('compression'),
+ methodOverride = require('method-override'),
+ cookieParser = require('cookie-parser'),
+ helmet = require('helmet'),
+ passport = require('passport'),
+ mongoStore = require('connect-mongo')({
+ 	session: session
+ }),
+ flash = require('connect-flash'),
+ config = require('./config'),
+ consolidate = require('consolidate'),
+ path = require('path'),
+ request = require('request');
 
-module.exports = function(db) {
+ module.exports = function(db) {
 	// Initialize express app
 	var app = express();
 	
@@ -147,12 +147,12 @@ module.exports = function(db) {
 		cookie: { secure = true}
 	})) */
 
-	var sess = {
-		secret: "anonymous-id", 
-		cookie: { maxAge : 6000000}
-	}
+var sess = {
+	secret: "anonymous-id", 
+	cookie: { maxAge : 6000000}
+}
 
-	if (app.get('env' === 'production')) {
+if (app.get('env' === 'production')) {
 		app.set('trust proxy', 1) // trust first proxy
 		sess.cookie.secure = true // serve secure cookies
 	}
@@ -206,6 +206,7 @@ module.exports = function(db) {
 	
 	
 	io.on('connection', function (socket) {
+<<<<<<< HEAD
 		console.log ("RECOGNIZED CLIENT!");
 		socket.on('mentorinit', function(data) {
 			console.log(data);
@@ -221,11 +222,23 @@ module.exports = function(db) {
 				}
 			}
 		);
+=======
+		socket.on('mentorinit', function(data) {
+			console.log(data);
+			console.log("[$$$$$$]");
+			var options = {url: 'supportkit/mentor/init', form: {name: data.name}};
+			request.post(options);
+>>>>>>> half-second-refresh
 		});
 		
 		socket.on('error', function (err) { console.error(err.stack); // TODO, cleanup })
 	});
 	});
+	io.on( 'error', function(err) {
+		console.log("err");
+		console.log(err);
+	});
+
 
 	// Return Express server instance
 	return app;

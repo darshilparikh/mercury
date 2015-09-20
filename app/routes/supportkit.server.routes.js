@@ -20,8 +20,7 @@ module.exports = function(app) {
 	var onGoingChats = [];
 	var freeMentors = [];
 	var waitingList = [];
-
-	var openConnections = [];
+	var waitingMsgs = [];
 
 	function sendMessage(senderName, appUserId, id, messageText) {
 		// /api/appusers/{appUserId|userId}/conversation/messages
@@ -38,6 +37,7 @@ module.exports = function(app) {
 				role : 'appMaker'
 			}
 		};
+		console.log(options);
 		
 		request.post(options, function optionalCallback(err, httpResponse, body) {
 			if (err) {
@@ -74,7 +74,7 @@ module.exports = function(app) {
 					"appUserId" : waitingList[0]
 				});
 
-				sendMessage("System", waitingList[0], waitingList[0], "You've been matched! Say hello to " + freeMentors[0].name);
+				sendMessage("System", waitingList[0], waitingList[0], "You've been matched!");
 
 				waitingList.shift();
 				freeMentors.shift();
@@ -91,12 +91,14 @@ module.exports = function(app) {
 					"appUserId" : appUserId
 				});
 				sendMessage("System", appUserId, appUserId, "You've been matched! Say hello to " + freeMentors[0].name);
-				sendMessage(freeMentors[0].name, appUserId, appUserId, message);
+
+				if(! waitingMsgs[freeMentors[0]["id"]]) {
+					waitingMsgs[freeMentors[0]["id"]] = [];
+				}
+				waitingMsgs[freeMentors[0]["id"]].push(message);
 				freeMentors.shift();
 
 			} else {
-				console.log("Telling");
-				console.log(waitingList);
 				if(waitingList.indexOf(appUserId) == -1) {
 					waitingList.push(appUserId);
 				}
@@ -108,13 +110,45 @@ module.exports = function(app) {
 		}
 	}
 
+	app.post('/supportkit/mentor/getmsgs', function (req, res, next) { 
+		var mentorID = req.body.id;
+		console.log(req.body.id);
+		if(waitingMsgs[mentorID]) {
+			var toReturn = waitingMsgs[mentorID];
+			waitingMsgs[mentorID] = []; 
+			res.send(toReturn);
+		}
+		res.send();
+	});
+
+	app.post('/supportkit/mentor/sendmessege', function (req, res, next) {
+		var msgSent = false;
+		console.log(req.body);
+		for(var x = 0; x < onGoingChats.length; x++) {
+			if(onGoingChats[x]["mentor"]["id"] == req.body.id) {
+				sendMessage(req.body.name, onGoingChats[x]["appUserId"], onGoingChats[x]["appUserId"], req.body.text);
+				msgSent = true;
+			}
+		}
+		console.log(msgSent);
+		if(msgSent) {
+			res.send();
+		} else {
+			if(! waitingMsgs[req.body.id]) {
+				waitingMsgs[req.body.id] = [];
+			}
+			waitingMsgs[req.body.id].push("Sorry, please wait to be matched before sending messages.");
+			res.send();
+		}
+	});
+
 	app.post('/supportkit/mentor/init', function (req, res, next) { 
 		console.log("Heloo Support");
 		var mentorID = generateUUID();
-		var mentorName = req.name;
+		var mentorName = req.body.name;
 		freeMentors.push({"id" : mentorID, "name" : mentorName });
 		assignMentor("", false);
-		res.send();
+		res.send({"id" : mentorID});
 	});
 
 	app.post('/supportkit', function (req, res, next) {
@@ -124,14 +158,21 @@ module.exports = function(app) {
 		}
 		console.log('supportkit');
 		console.log(req.body);
+		console.log(appUserId);
 		console.log(req.headers);
 
 		if(req.body.event === 'message:appUser') {
-			if(ifOnGoingChat(appUserId)) {
-				global.io.sockets.emit(appUserId, { name: req.body.name, text : req.body.text });
-			} else {
-				assignMentor(appUserId, true, req.body);
+			for(var x = 0; x < onGoingChats.length; x++) {
+				if(onGoingChats[x]["appUserId"] == appUserId) {
+					if(! waitingMsgs[onGoingChats[x]["mentor"]["id"]]) {
+						waitingMsgs[onGoingChats[x]["mentor"]["id"]] = [];
+					}
+					waitingMsgs[onGoingChats[x]["mentor"]["id"]].push(req.body.items[0].text);
+					res.send();
+					return;
+				}
 			}
+			assignMentor(appUserId, true, req.body.items[0].text);
 		}
 		res.send();
 		//next();
@@ -192,37 +233,5 @@ module.exports = function(app) {
 	}
 
 	checkWebHooks();
-	
 
-	
-
-	app.get('/supportkit/mentor/message', function (req, res) {
-		console.log("SOCKET IO BRUJ! YOOoOoooooooooooooooooooooooooooooo");
-		console.log(global.io);
-		console.log('supportkit');
-		console.log(req.body);
-		console.log(req.headers);
-
-		req.socket.setTimeout(Infinity);
-		res.writeHead(200, {
-			'Content-Type': 'text/event-stream',
-			'Cache-Control': 'no-cache',
-			'Connection': 'keep-alive'
-		});
-		res.write('\n');
-		openConnections.push(res);
-		req.on("close", function() {
-			var toRemove;
-			for (var j =0 ; j < openConnections.length ; j++) {
-				if (openConnections[j] == res) {
-					toRemove =j;
-					break;
-				}
-			}
-			openConnections.splice(j,1);
-		});
-
-
-		//next();
-	});
 };
