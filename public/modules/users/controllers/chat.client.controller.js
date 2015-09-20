@@ -31,6 +31,33 @@ angular.module('users').controller('ChatController', ['$scope','$http',
                 alert("Some sort of error with response");
             });
         }
+        
+        
+        function statCtrl($scope) {
+        
+                // the last received msg
+                $scope.msg = {};
+                
+                // handles the callback from the received event
+                var handleCallback = function (msg) {
+                        alert(JSON.stringify(msg));
+                        $scope.$apply(function () {
+                                $scope.msg = JSON.parse(msg.data)
+                        });
+                }
+                
+                var source = new EventSource('/supportkit/mentor/message');
+                source.addEventListener('message', handleCallback, false);
+        }
+        
+        var socket = io.connect('http://localhost:3000');
+                socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+        });
+        
+        
+        
 
         $scope.addBubble = function(avatar, text) {
 
@@ -65,4 +92,6 @@ angular.module('users').controller('ChatController', ['$scope','$http',
 
         
 	}
+        
+     
 ]);
